@@ -40,12 +40,12 @@ Here is a brief demo to bind Survey to a button:
 ```swift
 class ViewController: UIViewController {
     weak var surveyButton: UIButton!
-    
+
 	var survey: Survey!
-	
+
     func checkSurvey() {
 		let publisher = ....
-		let option = SurveyOption(publicher: publicher)
+		let option = SurveyOption(publisher: publisher)
 		survey = Survey(option: option)
 		survey.create { availability in
             if availability == .Available {
