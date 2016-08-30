@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta id="viewport" name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, width=device-width" />
+    <link rel="preconnect" href="https://surveywall-api.survata.com/">
     <style>
     @-webkit-keyframes spin {
       0% {
@@ -47,19 +48,11 @@
                   w[v].f = 1; w[v].qf = [];
                   w[v].fail = function(fn) { fn.call(w[v]); return w[v]; };
               }, 5000);
-              var s = d.createElement(t);
-              s.src = "https://api.survata.net/latest/js/survata.js?cb="+((new Date().getTime())/1e3).toFixed();
-              var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
           };
           w[v].ready = function() { g(); w[v].qr.push(arguments); return w[v]; };
           w[v].fail = function() { g(); w[v].qf.push(arguments); return w[v]; };
           w[v].publisher = "[PUBLISHER_ID]";
-      }(window, document, 'script', 'Survata'));
-    </script>
-  </head>
-  <body>
-    <div id="loader"/>
-    <script>
+    }(window, document, 'script', 'Survata'));
     Survata.ready(function() {
       var option = [OPTION] || {};
       option["verticalLayout"] = true;
@@ -90,5 +83,9 @@
       webkit.messageHandlers.onFail.postMessage();
     });
     </script>
+    <script src="https://api.survata.net/latest/js/survata.js"></script>
+  </head>
+  <body>
+    <div id="loader"/>
   </body>
 </html>
