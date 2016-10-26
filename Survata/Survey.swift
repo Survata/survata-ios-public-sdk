@@ -364,6 +364,9 @@ class SurveyViewController: UIViewController {
 					self?.dismissViewControllerAnimated(true, completion: nil)
 					self?.onCompletion?(.CreditEarned)
 				}
+			} else {
+				self?.dismissViewControllerAnimated(true, completion: nil)
+				self?.onCompletion?(.NoSurveyAvailable)
 			}
 		}
 		surveyView.on("interviewComplete") {[weak self] _ in

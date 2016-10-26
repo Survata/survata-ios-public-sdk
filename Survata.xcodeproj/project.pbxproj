@@ -22,7 +22,7 @@
 		CF16C0221C6C25FD004D5122 /* Survata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Survata.h; sourceTree = "<group>"; };
 		CF16C0241C6C25FD004D5122 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF57C63A1C7D431700DA54EB /* survata-spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "survata-spinner.png"; sourceTree = "<group>"; };
-		CF86875F1C6C3C550032F22B /* Survey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
+		CF86875F1C6C3C550032F22B /* Survey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; usesTabs = 1; };
 		CF8687611C6C42010032F22B /* template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.html; sourceTree = "<group>"; };
 		CF955ABE1C71AA25002AEBEA /* PostalCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostalCode.swift; sourceTree = "<group>"; };
 		CF955ADE1C71B639002AEBEA /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
