@@ -9,7 +9,7 @@
 We recommend integrating Survata into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'Survata', :git => 'git@github.com:Survata/survata-ios-public-sdk.git', :commit => '18b90a4' # Use latest commit
+pod 'Survata', :git => 'git@github.com:Survata/survata-ios-public-sdk.git'
 ```
 
 Then, run the following command:
