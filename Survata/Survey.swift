@@ -356,6 +356,9 @@ class SurveyViewController: UIViewController {
 
 		surveyView.on("load") {[weak self] data in
 			self?.survey.print("data \(data)")
+			let testing = self?.survey?.option.testing ?? false
+			let previewOption = (self?.survey?.option.preview ?? "")
+			let notAPreview = previewOption.isEmpty
 			if let data = data as? [String: AnyObject] {
 				if data["status"] as? String == "monetizable" {
 					surveyView.topBar?.hidden = false
@@ -364,7 +367,7 @@ class SurveyViewController: UIViewController {
 					self?.dismissViewControllerAnimated(true, completion: nil)
 					self?.onCompletion?(.CreditEarned)
 				}
-			} else {
+			} else if !testing && notAPreview {
 				self?.dismissViewControllerAnimated(true, completion: nil)
 				self?.onCompletion?(.NoSurveyAvailable)
 			}
