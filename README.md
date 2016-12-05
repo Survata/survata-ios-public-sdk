@@ -31,7 +31,7 @@ And add `import Survata` to the top of the files using Survata
     ```
     > carthage update
     ```
-NOTE: if it is fetching an outdated commit, remove line mentioning Survata in Cartfile.resolved file, the 'survata-ios-public-sdk' folder in Carthage/Checkouts, and the Survata.framework/.dSYM in Carthage/Build/iOS
+NOTE: if it is fetching an outdated commit, remove line mentioning Survata in Cartfile.resolved file, the 'survata-ios-public-sdk' folder in Carthage/Checkouts, and the Survata.framework/.dSYM in Carthage/Build/iOS. After that, run carthage update again.
 
 3. Follow [these steps](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) in Xcode
 
