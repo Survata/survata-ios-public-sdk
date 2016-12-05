@@ -21,25 +21,21 @@ $ pod install
 And add `import Survata` to the top of the files using Survata
 
 ### Carthage
-1. If you have attempted installing pod, please remove all traces of cocoaPods by following these commands:
-    ```
-    > pod deintegrate
-    > rm Podfile
-    ```
 
-2. To integrate Survata into your Xcode project using Carthage, specify it in your `Cartfile`:
+1. To integrate Survata into your Xcode project using Carthage, specify it in your `Cartfile`:
     ```ogdl
     github "Survata/survata-ios-public-sdk" "master"
     ```
 
-3. Run the following command so that it will build the Survata scheme.
+2. Run the following command so that it will build the Survata scheme. (Make sure that it is pulling the most recent commit from 'survata-ios-public-sdk')
     ```
     > carthage update
     ```
+NOTE: if it is fetching an outdated commit, remove line mentioning Survata in Cartfile.resolved file, the 'survata-ios-public-sdk' folder in Carthage/Checkouts, and the Survata.framework/.dSYM in Carthage/Build/iOS
 
-4. Follow [these steps](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) in Xcode
+3. Follow [these steps](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) in Xcode
 
-5. After adding the new Survata framework into Xcode, add `import Survata` to the top of the files using Survata
+4. After adding the new Survata framework into Xcode, add `import Survata` to the top of the files using Survata
 
 
 ## Examples
