@@ -68,15 +68,17 @@ class CloseButton: UIControl {
 		bezierPath.addLineToPoint(CGPointMake(62.54, 49.5))
 		bezierPath.addLineToPoint(CGPointMake(99.5, 12.54))
 		bezierPath.closePath()
-		let context = UIGraphicsGetCurrentContext()
-		CGContextSaveGState(context)
-		let width: CGFloat = 15
-		let height: CGFloat = 15
-		let scale: CGFloat = 0.15
-		CGContextTranslateCTM(context, (rect.size.width - width) / 2, (rect.size.height - height) / 2)
-		CGContextScaleCTM(context, scale, scale)
-		fillColor.setFill()
-		bezierPath.fill()
-		CGContextRestoreGState(context)
+		if let context = UIGraphicsGetCurrentContext() {
+            CGContextSaveGState(context)
+            
+            let width: CGFloat = 15
+            let height: CGFloat = 15
+            let scale: CGFloat = 0.15
+            CGContextTranslateCTM(context, (rect.size.width - width) / 2, (rect.size.height - height) / 2)
+            CGContextScaleCTM(context, scale, scale)
+            fillColor.setFill()
+            bezierPath.fill()
+            CGContextRestoreGState(context)
+        }
 	}
 }
