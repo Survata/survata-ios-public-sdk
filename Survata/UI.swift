@@ -9,76 +9,76 @@
 import UIKit
 
 extension UIView {
-	func alignTo(attribute: NSLayoutAttribute, margin: CGFloat = 0) {
-		superview!.addConstraint(NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: superview!, attribute: attribute, multiplier: 1, constant: margin))
+	func alignTo(_ attribute: NSLayoutAttribute, margin: CGFloat = 0) {
+		superview!.addConstraint(NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: superview!, attribute: attribute, multiplier: 1, constant: margin))
 	}
 
-	func fixAttribute(attribute: NSLayoutAttribute, value: CGFloat) {
-		addConstraint(NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 0, constant: value))
+	func fixAttribute(_ attribute: NSLayoutAttribute, value: CGFloat) {
+		addConstraint(NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0, constant: value))
 	}
 
-	func toTheTop(margin: CGFloat = 0) {
-		alignTo(.Top, margin: margin)
+	func toTheTop(_ margin: CGFloat = 0) {
+		alignTo(.top, margin: margin)
 	}
-	func toTheBottom(margin: CGFloat = 0) {
-		alignTo(.Bottom, margin: -margin)
-	}
-
-	func toTheRight(margin: CGFloat = 0) {
-		alignTo(.Trailing, margin: -margin)
+	func toTheBottom(_ margin: CGFloat = 0) {
+		alignTo(.bottom, margin: -margin)
 	}
 
-	func fullWidth(margin: CGFloat = 0) {
-		alignTo(.Leading, margin: margin)
+	func toTheRight(_ margin: CGFloat = 0) {
+		alignTo(.trailing, margin: -margin)
+	}
+
+	func fullWidth(_ margin: CGFloat = 0) {
+		alignTo(.leading, margin: margin)
 		toTheRight(margin)
 	}
 
-	func fullHeight(margin: CGFloat = 0) {
+	func fullHeight(_ margin: CGFloat = 0) {
 		toTheTop(margin)
 		toTheBottom(margin)
 	}
 }
 
 extension UIViewController {
-	func fullWidth(subview: UIView, margin: CGFloat = 0) {
+	func fullWidth(_ subview: UIView, margin: CGFloat = 0) {
 		subview.fullWidth(margin)
 	}
 
-	func fullHeight(subview: UIView, margin: CGFloat = 0) {
-		view.addConstraint(NSLayoutConstraint(item: subview, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: margin))
-		view.addConstraint(NSLayoutConstraint(item: subview, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: -margin))
+	func fullHeight(_ subview: UIView, margin: CGFloat = 0) {
+		view.addConstraint(NSLayoutConstraint(item: subview, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: margin))
+		view.addConstraint(NSLayoutConstraint(item: subview, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -margin))
 	}
 }
 
 class CloseButton: UIControl {
-	override func drawRect(rect: CGRect) {
+	override func draw(_ rect: CGRect) {
 		let fillColor = UIColor(white: 0.65, alpha: 1)
 		let bezierPath = UIBezierPath()
-		bezierPath.moveToPoint(CGPointMake(99.5, 12.54))
-		bezierPath.addLineToPoint(CGPointMake(86.46, -0.5))
-		bezierPath.addLineToPoint(CGPointMake(49.5, 36.46))
-		bezierPath.addLineToPoint(CGPointMake(12.54, -0.5))
-		bezierPath.addLineToPoint(CGPointMake(-0.5, 12.54))
-		bezierPath.addLineToPoint(CGPointMake(36.46, 49.5))
-		bezierPath.addLineToPoint(CGPointMake(-0.5, 86.46))
-		bezierPath.addLineToPoint(CGPointMake(12.54, 99.5))
-		bezierPath.addLineToPoint(CGPointMake(49.5, 62.54))
-		bezierPath.addLineToPoint(CGPointMake(86.46, 99.5))
-		bezierPath.addLineToPoint(CGPointMake(99.5, 86.46))
-		bezierPath.addLineToPoint(CGPointMake(62.54, 49.5))
-		bezierPath.addLineToPoint(CGPointMake(99.5, 12.54))
-		bezierPath.closePath()
+		bezierPath.move(to: CGPoint(x: 99.5, y: 12.54))
+		bezierPath.addLine(to: CGPoint(x: 86.46, y: -0.5))
+		bezierPath.addLine(to: CGPoint(x: 49.5, y: 36.46))
+		bezierPath.addLine(to: CGPoint(x: 12.54, y: -0.5))
+		bezierPath.addLine(to: CGPoint(x: -0.5, y: 12.54))
+		bezierPath.addLine(to: CGPoint(x: 36.46, y: 49.5))
+		bezierPath.addLine(to: CGPoint(x: -0.5, y: 86.46))
+		bezierPath.addLine(to: CGPoint(x: 12.54, y: 99.5))
+		bezierPath.addLine(to: CGPoint(x: 49.5, y: 62.54))
+		bezierPath.addLine(to: CGPoint(x: 86.46, y: 99.5))
+		bezierPath.addLine(to: CGPoint(x: 99.5, y: 86.46))
+		bezierPath.addLine(to: CGPoint(x: 62.54, y: 49.5))
+		bezierPath.addLine(to: CGPoint(x: 99.5, y: 12.54))
+		bezierPath.close()
 		if let context = UIGraphicsGetCurrentContext() {
-            CGContextSaveGState(context)
+            context.saveGState()
             
             let width: CGFloat = 15
             let height: CGFloat = 15
             let scale: CGFloat = 0.15
-            CGContextTranslateCTM(context, (rect.size.width - width) / 2, (rect.size.height - height) / 2)
-            CGContextScaleCTM(context, scale, scale)
+            context.translateBy(x: (rect.size.width - width) / 2, y: (rect.size.height - height) / 2)
+            context.scaleBy(x: scale, y: scale)
             fillColor.setFill()
             bezierPath.fill()
-            CGContextRestoreGState(context)
+            context.restoreGState()
         }
 	}
 }

@@ -12,9 +12,9 @@ enum Geocode {
 	class GeocodeContainer: NSObject, CLLocationManagerDelegate {
 		var locationManager: CLLocationManager!
 
-		var callback: (CLLocation? -> Void)?
+		var callback: ((CLLocation?) -> Void)?
 
-		func current(callback: CLLocation? -> Void) {
+		func current(_ callback: @escaping (CLLocation?) -> Void) {
 			locationManager?.stopUpdatingLocation()
 			self.callback = callback
 			if locationManager == nil {
@@ -26,13 +26,13 @@ enum Geocode {
 			locationManager.startUpdatingLocation()
 		}
 
-		func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+		func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 			callback?(locations.last)
 			callback = nil
 			manager.stopUpdatingLocation()
 		}
 
-		func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+		func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 			callback?(manager.location)
 			callback = nil
 			print(error.localizedDescription)
@@ -43,16 +43,16 @@ enum Geocode {
 			print("deinit GeocodeContainer")
 		}
 	}
-	private static var geoContainer = GeocodeContainer()
-	case Location(CLLocation)
-	case Current
+	fileprivate static var geoContainer = GeocodeContainer()
+	case location(CLLocation)
+	case current
 
-	func get(closure: (String?) -> ()) {
+	func get(_ closure: @escaping (String?) -> ()) {
 		switch self {
-		case .Location(let location):
+		case .location(let location):
 			CLGeocoder().reverseGeocodeLocation(location) { (addresses, error) in
 				if let addresses = addresses {
-					for address in addresses where address.ISOcountryCode == "US" {
+					for address in addresses where address.isoCountryCode == "US" {
 						if let postalCode = address.postalCode {
 							Cache(file: "geocode")?.saveJSON(["postalCode": postalCode])
 							closure(postalCode)
@@ -62,7 +62,7 @@ enum Geocode {
 				}
 				closure(nil)
 			}
-		case .Current:
+		case .current:
 			if let cached = Cache(file: "geocode")?.loadJSON(expireAfter: 86400) as? [String: AnyObject] {
 				if let postalCode = cached["postalCode"] as? String {
 					closure(postalCode)
@@ -70,10 +70,10 @@ enum Geocode {
 				}
 			}
 			switch CLLocationManager.authorizationStatus() {
-			case .AuthorizedAlways, .AuthorizedWhenInUse:
+			case .authorizedAlways, .authorizedWhenInUse:
 				Geocode.geoContainer.current { (location) in
 					if let location = location {
-						Geocode.Location(location).get(closure)
+						Geocode.location(location).get(closure)
 					} else {
 						closure(nil)
 					}
@@ -88,11 +88,11 @@ enum Geocode {
 struct Cache {
 	let filePath: String
 	init?(file: String) {
-		let home = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first
-		if let folder = home?.stringByAppendingString("/survata") {
-			if !NSFileManager.defaultManager().fileExistsAtPath(folder) {
+		let home = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+		if let folder = (home)! + "/survata" {
+			if !FileManager.default.fileExists(atPath: folder) {
 				do {
-					try NSFileManager.defaultManager().createDirectoryAtPath(folder, withIntermediateDirectories: true, attributes: nil)
+					try FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true, attributes: nil)
 				} catch {
 					return nil
 				}
@@ -103,24 +103,25 @@ struct Cache {
 		}
 	}
 
-	func loadJSON(expireAfter time: NSTimeInterval) -> AnyObject? {
-		if let attr = try? NSFileManager.defaultManager().attributesOfItemAtPath(filePath),
-			lastModified = attr[NSFileModificationDate] as? NSDate {
+	func loadJSON(expireAfter time: TimeInterval) -> AnyObject? {
+		if let attr = try? FileManager.default.attributesOfItem(atPath: filePath),
+			let lastModified = attr[FileAttributeKey.modificationDate] as? Date {
 				let time = lastModified.timeIntervalSinceNow + time
 				if time < 0 {
 					return nil
 				}
 		}
-		if let data = NSData(contentsOfFile: filePath),
-			object = try? NSJSONSerialization.JSONObjectWithData(data, options: []) {
-				return object
+		if let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)),
+			let object = try? JSONSerialization.jsonObject(with: data, options: []) {
+				return object as AnyObject?
 		}
 		return nil
 	}
 
-	func saveJSON(json: AnyObject) {
-		if let data = try? NSJSONSerialization.dataWithJSONObject(json, options: []) {
-			data.writeToFile(filePath, atomically: false)
+	func saveJSON(_ json: AnyObject) {
+		if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
+            try? data.write(to: URL(fileURLWithPath: filePath), options: [atomically: true])
+            // TODO check atomic
 		}
 	}
 }
