@@ -9,17 +9,17 @@
 import Foundation
 
 extension Survey {
-	static func post(urlString: String, json: [String: AnyObject], completion: ([String: AnyObject]?, NSError?) -> Void) {
-		guard let url = NSURL(string: urlString) else {
+	static func post(urlString: String, json: [String: AnyObject], completion: @escaping ([String: AnyObject]?, NSError?) -> Void) {
+		guard let url = URL(string: urlString) else {
 			return
 		}
-		let request = NSMutableURLRequest(URL: url, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 20)
-		request.HTTPMethod = "POST"
+		let request = NSMutableURLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 20)
+		request.httpMethod = "POST"
 		let userAgent: String = {
-			if let info = NSBundle.mainBundle().infoDictionary {
-				let executable: AnyObject = info[kCFBundleExecutableKey as String] ?? "Unknown"
-				let bundle: AnyObject = info[kCFBundleIdentifierKey as String] ?? "Unknown"
-				let version: AnyObject = info["CFBundleShortVersionString"] ?? "Unknown"
+			if let info = Bundle.main.infoDictionary {
+				let executable: AnyObject = info[kCFBundleExecutableKey as String] as? AnyObject ?? "Unknown" as AnyObject
+				let bundle: AnyObject = info[kCFBundleIdentifierKey as String] as? AnyObject ?? "Unknown" as AnyObject
+				let version: AnyObject = info["CFBundleShortVersionString"] as? AnyObject ?? "Unknown" as AnyObject
 
 				let mutableUserAgent = NSMutableString(string: "\(executable)/\(bundle) Survata/iOS/\(version)") as CFMutableString
 				let transform = NSString(string: "Any-Latin; Latin-ASCII; [:^ASCII:] Remove") as CFString
@@ -31,21 +31,21 @@ extension Survey {
 			return "Survata/iOS"
 		}()
 		request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-		request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(json, options: [])
+		request.httpBody = try! JSONSerialization.data(withJSONObject: json, options: [])
 		request.setValue("application/javascript", forHTTPHeaderField: "Content-Type")
-		let session = NSURLSession.sharedSession()
-		let task = session.dataTaskWithRequest(request) { (data, _, error) in
+		let session = URLSession.shared
+		let task = session.dataTask(with: request, completionHandler: { (data, _, error) in
 			if let data = data,
-				object = try! NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String: AnyObject] {
-				dispatch_async(dispatch_get_main_queue()) {
+				let object = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject] {
+				DispatchQueue.main.async {
 					completion(object, nil)
 				}
 			} else {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					completion(nil, error)
 				}
 			}
-		}
+		}) 
 		task.resume()
 	}
 }
