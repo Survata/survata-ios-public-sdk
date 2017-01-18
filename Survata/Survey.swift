@@ -62,7 +62,6 @@ do not modify it after sending to Survey.create
 
 	func optionForSDK(_ zipcode: String?) -> [String: AnyObject] {
 		var option: [String: AnyObject] = [:]
-		// todo types
 		option["mobileAdId"] = mobileAdId as AnyObject?
 		option["publisherUuid"] = publisher as AnyObject?
 		option["contentName"] = contentName as AnyObject?
@@ -74,7 +73,6 @@ do not modify it after sending to Survey.create
 
 	func optionForJS(_ zipcode: String?) -> [String: AnyObject] {
 		var option: [String: AnyObject] = [:]
-		// todo types
 		option["brand"] = brand as AnyObject?
 		option["explainer"] = explainer as AnyObject?
 		option["contentName"] = contentName as AnyObject?
@@ -124,7 +122,7 @@ private func disposeMediaWindow() {
 //Survata Survey
 @objc(SVSurvey) open class Survey: NSObject {
 	fileprivate static let urlString = "https://surveywall-api.survata.com/rest/interview-check/create"
-	// setting to ture will print every detail of this api. default to true
+	// setting `verbose` to true will print every detail of this api. default to true
 	open static var verbose: Bool = true
 	fileprivate var availability: SVSurveyAvailability!
 	// log will be sent to debugDelegate if verbose is set to true
@@ -143,7 +141,7 @@ private func disposeMediaWindow() {
 	create: call this function to initialize Survata
 	- parameter completion: closure to callback availability
 
-	cause the availability can be changed from time to time, please use this method right before `createSurveyWall`. Results of presentation on availability other than `.Available` is not guaranteed.
+	cause the availability can be changed from time to time, please use this method right before `createSurveyWall`. Results of presentation on availability other than `.available` is not guaranteed.
 
 	e.g. use the availability to determine wether to show the survata button and the button will trigger presentation
 	*/
@@ -176,7 +174,7 @@ private func disposeMediaWindow() {
 			completion(availability)
 		}
 		print("Survey.create sending \(json)...")
-		Survey.post(Survey.urlString, json: json) {[weak self] (object, error) in
+		Survey.post(urlString: Survey.urlString, json: json) {[weak self] (object, error) in
 			if let object = object {
 				self?.print("Survey.create response \(object)")
 				if let valid = object["valid"] as? Bool, !valid {
@@ -318,7 +316,6 @@ class SurveyView: UIView, WKScriptMessageHandler {
 
 	func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 		survey?.print("Survata.js on event '\(message.name)'")
-		// todo types
 		events[message.name]?.forEach { $0(message.body as AnyObject) }
 	}
 }
@@ -334,7 +331,7 @@ class SurveyViewController: UIViewController {
 		return .all
 	}
 
-	var timer: DispatchSource!
+	var timer: DispatchSourceTimer!
 
 	override func viewDidLoad() {
 		view.backgroundColor = UIColor.clear
@@ -392,10 +389,9 @@ class SurveyViewController: UIViewController {
 		}
 
 		surveyView.createSurveyWall(survey)
-		timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: 0), queue: DispatchQueue.main) /*Migrator FIXME: Use DispatchSourceTimer to avoid the cast*/ as! DispatchSource
-		// todo ^^
+		timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: 0), queue: DispatchQueue.main)
 		timer.resume()
-		timer.setTimer(start: DispatchTime.now(), interval: UInt64(2 * Double(NSEC_PER_SEC)), leeway: 0)
+		timer.scheduleRepeating(deadline: DispatchTime.now(), interval: DispatchTimeInterval.seconds(2), leeway: DispatchTimeInterval.seconds(0))
 		timer.setEventHandler {[weak self] in
 			if !Survey.isConnectedToNetwork() {
 				self?.dismiss(animated: true, completion: nil)
