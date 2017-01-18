@@ -51,10 +51,10 @@ class ViewController: UIViewController {
     var survey: Survey!
 
     func checkSurvey() {
-        let publisher = ....
-        let option = SurveyOption(publicher: publicher)
-        survey = Survey(option: option)
-        survey.create { availability in
+		let publisher = ....
+		let option = SurveyOption(publisher: publisher)
+		survey = Survey(option: option)
+		survey.create { availability in
             if availability == .Available {
                 surveyButton.hidden = false
             }
