@@ -9,24 +9,26 @@
 import Foundation
 
 extension Survey {
-	static func post(urlString: String, json: [String: AnyObject], completion: @escaping ([String: AnyObject]?, NSError?) -> Void) {
+	static func post(urlString: String, json: [String: AnyObject], completion: @escaping ([String: AnyObject]?, Error?) -> Void) {
 		guard let url = URL(string: urlString) else {
 			return
 		}
-		let request = NSMutableURLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 20)
+		var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 20)
 		request.httpMethod = "POST"
+        // logic inspired by Alamofire's user agent handling 
+        // see https://github.com/Alamofire/Alamofire/blob/305258733be64dd99a7f70cf777b33112d738571/Source/Manager.swift for context
 		let userAgent: String = {
 			if let info = Bundle.main.infoDictionary {
-				let executable: AnyObject = info[kCFBundleExecutableKey as String] as? AnyObject ?? "Unknown" as AnyObject
-				let bundle: AnyObject = info[kCFBundleIdentifierKey as String] as? AnyObject ?? "Unknown" as AnyObject
-				let version: AnyObject = info["CFBundleShortVersionString"] as? AnyObject ?? "Unknown" as AnyObject
+				let executable: AnyObject = info[kCFBundleExecutableKey as String] as AnyObject? ?? "Unknown" as AnyObject
+				let bundle: AnyObject = info[kCFBundleIdentifierKey as String] as AnyObject? ?? "Unknown" as AnyObject
+				let version: AnyObject = info["CFBundleShortVersionString"] as AnyObject? ?? "Unknown" as AnyObject
 
 				let mutableUserAgent = NSMutableString(string: "\(executable)/\(bundle) Survata/iOS/\(version)") as CFMutableString
 				let transform = NSString(string: "Any-Latin; Latin-ASCII; [:^ASCII:] Remove") as CFString
 
-				if CFStringTransform(mutableUserAgent, UnsafeMutablePointer<CFRange>(nil), transform, false) {
-					return mutableUserAgent as String
-				}
+                if CFStringTransform(mutableUserAgent, nil, transform, false) {
+                    return mutableUserAgent as String
+                }
 			}
 			return "Survata/iOS"
 		}()

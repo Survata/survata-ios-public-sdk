@@ -54,7 +54,7 @@ enum Geocode {
 				if let addresses = addresses {
 					for address in addresses where address.isoCountryCode == "US" {
 						if let postalCode = address.postalCode {
-							Cache(file: "geocode")?.saveJSON(["postalCode": postalCode])
+							Cache(file: "geocode")?.saveJSON(["postalCode": postalCode] as AnyObject)
 							closure(postalCode)
 							return
 						}
@@ -89,7 +89,8 @@ struct Cache {
 	let filePath: String
 	init?(file: String) {
 		let home = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-		if let folder = (home)! + "/survata" {
+        if let home = home {
+            let folder = home + "/survata"
 			if !FileManager.default.fileExists(atPath: folder) {
 				do {
 					try FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true, attributes: nil)
@@ -120,8 +121,7 @@ struct Cache {
 
 	func saveJSON(_ json: AnyObject) {
 		if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
-            try? data.write(to: URL(fileURLWithPath: filePath), options: [atomically: true])
-            // TODO check atomic
+            try? data.write(to: URL(fileURLWithPath: filePath), options: .atomic)
 		}
 	}
 }
