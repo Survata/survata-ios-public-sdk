@@ -121,7 +121,8 @@ private func disposeMediaWindow() {
 
 //Survata Survey
 @objc(SVSurvey) open class Survey: NSObject {
-	fileprivate static let urlString = "https://surveywall-api.survata.com/rest/interview-check/create"
+//	fileprivate static let urlString = "https://surveywall-api.survata.com/rest/interview-check/create"
+	fileprivate static let urlString = "http://surveywall-api.survata.com.local:8070/survata-surveywall/rest/interview-check/create";
 	// setting `verbose` to true will print every detail of this api. default to true
 	open static var verbose: Bool = true
 	fileprivate var availability: SVSurveyAvailability!
@@ -298,7 +299,7 @@ class SurveyView: UIView, WKScriptMessageHandler {
 				.replacingOccurrences(of: "[OPTION]", with: optionString)
 				.replacingOccurrences(of: "[LOADER_BASE64]", with: loader)
 			survey.print("loading survata option = \(optionString)...")
-			webView.loadHTMLString(html, baseURL: URL(string: "https://www.survata.com"))
+			webView.loadHTMLString(html, baseURL: URL(string: "http://www.survata.com.local"))
 		}
 	}
 
