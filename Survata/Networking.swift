@@ -35,6 +35,7 @@ extension Survey {
 		request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
 		request.httpBody = try! JSONSerialization.data(withJSONObject: json, options: [])
 		request.setValue("application/javascript", forHTTPHeaderField: "Content-Type")
+		request.setValue(json["mobileAdId"] as! String?, forHTTPHeaderField: "GAID")
 		let session = URLSession.shared
 		let task = session.dataTask(with: request, completionHandler: { (data, _, error) in
 			if let data = data,
