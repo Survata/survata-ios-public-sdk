@@ -33,6 +33,7 @@ extension Survey {
 		request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
 		request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(json, options: [])
 		request.setValue("application/javascript", forHTTPHeaderField: "Content-Type")
+		request.setValue(json["mobileAdId"] as! String?, forHTTPHeaderField: "GAID")
 		let session = NSURLSession.sharedSession()
 		let task = session.dataTaskWithRequest(request) { (data, _, error) in
 			if let data = data,
