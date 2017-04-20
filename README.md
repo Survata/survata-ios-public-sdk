@@ -23,6 +23,14 @@ Then, run the following command:
 $ pod install
 ```
 
+If changes have been made to the survata-public-ios-sdk, to get the latest changes.
+run the following commands:
+```bash
+$ pod repo remove master
+$ pod setup
+$ pod install
+```
+
 And add `import Survata` to the top of the files using Survata
 
 ### Carthage
