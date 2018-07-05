@@ -33,7 +33,7 @@ extension Survey {
 			return "Survata/iOS"
 		}()
 		request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-		request.httpBody = try? JSONSerialization.data(withJSONObject: json, options: [])
+		request.httpBody = try! JSONSerialization.data(withJSONObject: json, options: [])
 		request.setValue("application/javascript", forHTTPHeaderField: "Content-Type")
 		request.setValue(json["mobileAdId"] as! String?, forHTTPHeaderField: "GAID")
 		let session = URLSession.shared
