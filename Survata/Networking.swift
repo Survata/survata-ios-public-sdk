@@ -15,7 +15,7 @@ extension Survey {
 		}
 		var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 20)
 		request.httpMethod = "POST"
-        // logic inspired by Alamofire's user agent handling 
+        // logic inspired by Alamofire's user agent handling
         // see https://github.com/Alamofire/Alamofire/blob/305258733be64dd99a7f70cf777b33112d738571/Source/Manager.swift for context
 		let userAgent: String = {
 			if let info = Bundle.main.infoDictionary {
@@ -39,7 +39,7 @@ extension Survey {
 		let session = URLSession.shared
 		let task = session.dataTask(with: request, completionHandler: { (data, _, error) in
 			if let data = data,
-				let object = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject] {
+				let object = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject] {
 				DispatchQueue.main.async {
 					completion(object, nil)
 				}
@@ -48,7 +48,7 @@ extension Survey {
 					completion(nil, error)
 				}
 			}
-		}) 
+		})
 		task.resume()
 	}
 }
