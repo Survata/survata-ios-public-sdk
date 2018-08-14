@@ -7,9 +7,9 @@
 ### CocoaPods
 
 We recommend integrating Survata into your Xcode project using CocoaPods, specify it in your `Podfile`:
-(this repo is written in Swift 3)
+(this repo is written in Swift 4)
 ```ruby
-pod 'Survata', :git => 'git@github.com:Survata/survata-ios-public-sdk.git'
+pod 'Survata', :git => 'git@github.com:Survata/survata-ios-public-sdk.git', :branch => 'swift-4'
 ```
 *NOTE
 If you are looking for the sdk written in Swift 2.3, use this snippet in the `Podfile`:
