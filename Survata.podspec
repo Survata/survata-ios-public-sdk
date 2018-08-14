@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Survata"
-  s.version          = "1.0.0"
+  s.version          = "2.0.0"
   s.summary          = "Survata SDK"
   s.homepage         = "https://github.com/Survata/survata-ios-public-sdk"
   s.license          = 'MIT'
