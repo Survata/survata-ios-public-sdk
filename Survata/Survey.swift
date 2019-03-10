@@ -391,7 +391,7 @@ class SurveyViewController: UIViewController {
 		surveyView.createSurveyWall(survey)
 		timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: 0), queue: DispatchQueue.main)
 		timer.resume()
-		timer.scheduleRepeating(deadline: DispatchTime.now(), interval: DispatchTimeInterval.seconds(2), leeway: DispatchTimeInterval.seconds(0))
+		timer.schedule(deadline: DispatchTime.now(), repeating: DispatchTimeInterval.seconds(2), leeway: DispatchTimeInterval.seconds(0))
 		timer.setEventHandler {[weak self] in
 			if !Survey.isConnectedToNetwork() {
 				self?.dismiss(animated: true, completion: nil)
@@ -412,7 +412,7 @@ class SurveyViewController: UIViewController {
 		}
 	}
 
-	func close() {
+	@objc func close() {
 		dismiss(animated: true, completion: nil)
 		onCompletion?(.canceled)
 	}
